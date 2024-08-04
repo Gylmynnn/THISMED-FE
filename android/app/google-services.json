@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "638457051369",
+    "project_id": "thismed-app",
+    "storage_bucket": "thismed-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638457051369:android:379d4740654984f2671878",
+        "android_client_info": {
+          "package_name": "dice.com.thismed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638457051369-8i18pbadno9masu4jjlp9cv33a1pi2s3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxsf-gSxczB8fWoI27JhiyfIMMoqRI9ZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638457051369-8i18pbadno9masu4jjlp9cv33a1pi2s3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638457051369-25mk3sl2oi5s4h0q258to6bni8b2emrv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dice.com.thismed"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638457051369:android:23537584b92ae2dd671878",
+        "android_client_info": {
+          "package_name": "thismed.ac.id"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638457051369-0e5s2qaor56fh3akpt3r9e6nkpgguqv0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "thismed.ac.id",
+            "certificate_hash": "822527317c47e74de6d2f0446f3f7101b044b790"
+          }
+        },
+        {
+          "client_id": "638457051369-8i18pbadno9masu4jjlp9cv33a1pi2s3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxsf-gSxczB8fWoI27JhiyfIMMoqRI9ZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638457051369-8i18pbadno9masu4jjlp9cv33a1pi2s3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638457051369-25mk3sl2oi5s4h0q258to6bni8b2emrv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "dice.com.thismed"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
