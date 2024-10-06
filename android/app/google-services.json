@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "638457051369-jl29pmssm6kafrllli611cu0ld3fo0uh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dice.com.thismed",
+            "certificate_hash": "822527317c47e74de6d2f0446f3f7101b044b790"
+          }
+        },
+        {
           "client_id": "638457051369-8i18pbadno9masu4jjlp9cv33a1pi2s3.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
 import 'package:get/get.dart';
 import 'package:thismed/app/components/c_button.dart';
 import 'package:thismed/app/components/c_form.dart';
 import 'package:thismed/app/utils/themes/views/theme_view.dart';
-
 import '../controllers/setup_controller.dart';
 
 class SetupView extends GetView<SetupController> {
   const SetupView({super.key});
   @override
   Widget build(BuildContext context) {
-    var key = GlobalKey<FormState>();
+    // var key = GlobalKey<FormState>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 36),
           child: Form(
-            key: key,
+            key: controller.key,
             child: SingleChildScrollView(
               child: Column(
                 // physics: const NeverScrollableScrollPhysics(),
@@ -73,7 +71,7 @@ class SetupView extends GetView<SetupController> {
                     textStyle: whiteTextStyle.copyWith(
                         fontWeight: FontWeight.w600, fontSize: 20),
                     onPressed: () {
-                      if (key.currentState!.validate()) {
+                      if (controller.key.currentState!.validate()) {
                         controller.setupAttribute();
                       }
                     },

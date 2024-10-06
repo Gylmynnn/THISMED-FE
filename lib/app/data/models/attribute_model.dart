@@ -15,7 +15,7 @@ class AttributeModel {
     this.userId,
   });
 
-  factory AttributeModel.fromJson(Map<String, dynamic> json) {
+  factory AttributeModel.fromJson(Map<String, dynamic> json ) {
     return AttributeModel(
       id: json['id'] ?? '',
       username: json['username'] ?? '',

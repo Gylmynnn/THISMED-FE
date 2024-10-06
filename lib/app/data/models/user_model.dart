@@ -1,18 +1,23 @@
+import '../models/attribute_model.dart';
+
 class UserModel {
   String id;
   String email;
-  String password;
+  String? password;
   String? token;
   String? createdAt;
   String? updatedAt;
+  AttributeModel? attribute;
+
 
   UserModel({
     required this.id,
     required this.email,
-    required this.password,
+     this.password,
     this.token,
     this.createdAt,
     this.updatedAt,
+    this.attribute,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +28,7 @@ class UserModel {
       token: json['token'] ?? '',
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
+      attribute: json['attribute'] != null ? AttributeModel.fromJson(json['attribute']) : null,
     );
   }
 
@@ -30,10 +36,11 @@ class UserModel {
     return {
       'id': id,
       'email': email,
-      'password': password,
+      'password': password ?? '',
       'token': token ?? '',
       'createdAt': createdAt ?? '',
       'updatedAt': updatedAt ?? '',
+      'attribute' : attribute ?? '' 
     };
   }
 }

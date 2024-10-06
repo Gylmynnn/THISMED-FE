@@ -12,8 +12,11 @@ class CsButton extends StatelessWidget {
       this.useIcon = false,
       this.useBorder = false,
       this.textOnly = false,
+    this.height = 52,
       this.alignment,
       this.icon});
+
+  final double height;
   final String title;
   final Color? bgColor;
   final Color? borderColor;
@@ -40,7 +43,7 @@ class CsButton extends StatelessWidget {
           )
         : SizedBox(
             width: double.infinity,
-            height: 52,
+            height: height,
             child: TextButton(
               style: TextButton.styleFrom(
                 side: useBorder

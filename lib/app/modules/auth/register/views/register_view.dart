@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-
 import 'package:get/get.dart';
 import 'package:thismed/app/components/c_button.dart';
 import 'package:thismed/app/components/c_form.dart';
 import 'package:thismed/app/modules/auth/register/controllers/register_controller.dart';
+import 'package:thismed/app/utils/hellper/layout.dart';
 import 'package:thismed/app/utils/themes/views/theme_view.dart';
 
 class RegisterView extends GetView<RegisterController> {
@@ -18,7 +18,13 @@ class RegisterView extends GetView<RegisterController> {
         body: SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
-        child: Form(
+        child: _buildForm(controller, key),),
+    ));
+  }
+}
+
+Form _buildForm (RegisterController controller, GlobalKey<FormState> key) {
+  return  Form(
           key: key,
           child: SingleChildScrollView(
             child: Column(
@@ -30,25 +36,25 @@ class RegisterView extends GetView<RegisterController> {
                   style: greyTextStyle.copyWith(
                       fontWeight: FontWeight.bold, fontSize: 64),
                 ),
-                const Gap(20),
+                Gaps.medium,
                 Text(
-                  'Email',
+                  '✉  Email',
                   style: greyTextStyle.copyWith(
                       fontWeight: FontWeight.w600, fontSize: 16),
                 ),
-                const Gap(10),
+                Gaps.small,
                 CsFormField(
                   placeholder: 'Enter Your Email',
                   textValidator: 'Email cannot be empty',
                   controller: controller.emailC,
                 ),
-                const Gap(20),
+                Gaps.medium,
                 Text(
-                  'Password',
+                  '🔒 Password',
                   style: greyTextStyle.copyWith(
                       fontWeight: FontWeight.w600, fontSize: 16),
                 ),
-                const Gap(10),
+                Gaps.small,
                 Obx(() => CsFormField(
                       obsecureText: controller.passwordSecure.value,
                       suffixIcon: Obx(() => IconButton(
@@ -78,11 +84,11 @@ class RegisterView extends GetView<RegisterController> {
                 ),
                 // const Gap(20),
                 Text(
-                  'Confirm Password',
+                  '🔑 Confirm Password',
                   style: greyTextStyle.copyWith(
                       fontWeight: FontWeight.w600, fontSize: 16),
                 ),
-                const Gap(10),
+                Gaps.small,
                 Obx(() => CsFormField(
                       obsecureText: controller.confirmPasswordSecure.value,
                       suffixIcon: Obx(() => IconButton(
@@ -102,9 +108,9 @@ class RegisterView extends GetView<RegisterController> {
                       textValidator: 'Password cannot be empty',
                       controller: controller.confirmPasswordC,
                     )),
-                const Gap(38),
+                Gaps.large,
                 CsButton(
-                  title: 'Sign Up',
+                  title: 'Register ✨',
                   bgColor: primaryColor,
                   textStyle: whiteTextStyle.copyWith(
                       fontWeight: FontWeight.w600, fontSize: 20),
@@ -114,7 +120,7 @@ class RegisterView extends GetView<RegisterController> {
                     }
                   },
                 ),
-                const Gap(24),
+                Gaps.medium,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -122,7 +128,7 @@ class RegisterView extends GetView<RegisterController> {
                         style: greyTextStyle.copyWith(
                             fontWeight: FontWeight.w600, fontSize: 16)),
                     CsButton(
-                      title: 'Sign In',
+                      title: 'Login 🎈',
                       textStyle: primaryTextStyle.copyWith(
                           fontWeight: FontWeight.w600, fontSize: 16),
                       textOnly: true,
@@ -133,8 +139,6 @@ class RegisterView extends GetView<RegisterController> {
               ],
             ),
           ),
-        ),
-      ),
-    ));
-  }
+        );
+
 }
