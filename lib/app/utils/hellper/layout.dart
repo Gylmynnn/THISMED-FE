@@ -14,9 +14,12 @@ class Gaps {
   }
 }
 
+
+
 class MediaQuerys {
   static double widthMQ = Get.width;
   static double heightMQ = Get.height;
+  static final h = Get.theme.colorScheme.primary;
 }
 
 class Paddings {
