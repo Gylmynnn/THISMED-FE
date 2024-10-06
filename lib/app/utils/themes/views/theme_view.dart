@@ -5,27 +5,28 @@ import 'package:google_fonts/google_fonts.dart';
 class ThemeUtilsView {
   static ThemeData getLightTheme() {
     return ThemeData(
-        colorScheme: const ColorScheme.light(primary: Colors.black),
+        colorScheme: const ColorScheme.light(primary: Colorsss.primary),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
           scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,
         ),
         brightness: Brightness.light,
-        primaryTextTheme: GoogleFonts.poppinsTextTheme());
+        textTheme: GoogleFonts.latoTextTheme());
   }
 
   static ThemeData getDarkTheme() {
     return ThemeData(
-        colorScheme: const ColorScheme.dark(primary: Colors.white),
+        colorScheme: const ColorScheme.dark(primary: Colorsss.primary),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
           scrolledUnderElevation: 0,
           backgroundColor: Colors.transparent,
         ),
         brightness: Brightness.dark,
-        textTheme: GoogleFonts.poppinsTextTheme());
+        textTheme: GoogleFonts.latoTextTheme());
   }
+ 
 
   static Transition getDefaultTransition(String value) {
     switch (value) {
@@ -70,11 +71,15 @@ class ThemeUtilsView {
   static String logoGoogle = 'assets/images/google-logo.png';
 }
 
+class Colorsss {
+  static const Color primary = Color(0xff2C96F1);
+}
+
 Color primaryColor = const Color(0xff2C96F1);
 Color dangerColor = const Color(0xffED6363);
 Color successColor = const Color.fromARGB(255, 147, 237, 99);
 Color primaryTextColor = const Color(0xff444444);
-Color secondaryTextColor = const Color(0xff444444).withOpacity(0.4);
+Color secondaryTextColor = const Color(0xff666666).withOpacity(0.2);
 Color bgColor = const Color(0xffffffff);
 
 TextStyle primaryTextStyle = GoogleFonts.lato(color: primaryColor);

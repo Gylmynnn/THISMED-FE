@@ -1,27 +1,26 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thismed/app/data/models/user_model.dart';
-import 'package:thismed/app/data/services/services.dart';
+import 'package:thismed/app/data/services/auth_service.dart';
 import 'package:thismed/app/routes/app_pages.dart';
 
 class RegisterController extends GetxController {
+  final AuthService http = AuthService();
   late TextEditingController usernameC;
   late TextEditingController emailC;
   late TextEditingController passwordC;
   late TextEditingController confirmPasswordC;
   final RxBool passwordSecure = true.obs;
   final RxBool confirmPasswordSecure = true.obs;
-  late GlobalKey<FormState> key;
-  final random = Random();
+  // final GlobalKey<FormState> key = GlobalKey<FormState>();
+  final Random random = Random();
   final String characters =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890|!@#\$%^&*()_+';
   final RxString password = ''.obs;
 
   @override
   void onInit() {
-    key = GlobalKey<FormState>();
     usernameC = TextEditingController();
     emailC = TextEditingController();
     passwordC = TextEditingController();
@@ -31,13 +30,9 @@ class RegisterController extends GetxController {
 
   @override
   void onClose() {
-    usernameC.clear();
     usernameC.dispose();
-    emailC.clear();
     emailC.dispose();
-    passwordC.clear();
     passwordC.dispose();
-    confirmPasswordC.clear();
     confirmPasswordC.dispose();
     super.onClose();
   }
@@ -55,7 +50,7 @@ class RegisterController extends GetxController {
       if (passwordC.text != confirmPasswordC.text) {
         Get.snackbar("Info", "password not match");
       } else {
-        await AppServices.registerService(data);
+        await http.registerService(data);
         Get.offNamed(Routes.LOGIN);
       }
     } catch (e) {

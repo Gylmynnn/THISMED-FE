@@ -5,7 +5,6 @@ import 'package:thismed/app/utils/themes/views/theme_view.dart';
 
 class ThemeController extends GetxController {
   final RxBool isDarkMode = false.obs;
-
   final String _themeKey = 'isDarkMode';
 
   @override

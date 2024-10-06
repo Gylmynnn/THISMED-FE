@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:thismed/app/data/events/event_pref.dart';
 import 'package:thismed/app/data/models/user_model.dart';
-import 'package:thismed/app/data/services/services.dart';
+import 'package:thismed/app/data/services/auth_service.dart';
 import 'package:thismed/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
+  final AuthService http = AuthService();
   late TextEditingController emailC;
   late TextEditingController passwordC;
-  late GlobalKey<FormState> key;
+  // final GlobalKey<FormState> key = GlobalKey<FormState>();
   final RxBool passwordSecure = true.obs;
 
   Rx<UserModel> userData = UserModel(
@@ -21,7 +23,6 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    key = GlobalKey<FormState>();
     emailC = TextEditingController();
     passwordC = TextEditingController();
     super.onInit();
@@ -29,9 +30,7 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    emailC.clear();
     emailC.dispose();
-    passwordC.clear();
     passwordC.dispose();
     super.onClose();
   }
@@ -40,11 +39,12 @@ class LoginController extends GetxController {
     try {
       final data =
           UserModel(id: '', email: emailC.text, password: passwordC.text);
-      final response = await AppServices.loginService(data);
-      userData.value = response;
-      Get.offNamed(Routes.SETUP);
+      await http.loginService(data);
+      // print(EventPref.readUser()!.id);
+      // userData.value = response;
+      Get.offNamed(Routes.HOME);
     } catch (e) {
-      throw Exception("errr");
+      throw Exception(e);
     }
   }
 }

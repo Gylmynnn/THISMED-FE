@@ -29,7 +29,7 @@ class CsFormField extends StatelessWidget {
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
           filled: true,
           fillColor: fullBorder == true
               ? Colors.transparent

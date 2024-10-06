@@ -16,16 +16,16 @@ class EventPref {
   }
 
   static Future<void> writeUser(UserModel user) async {
-    await _refrenceBox.write(_userKey, user.toJson());
+     await _refrenceBox.write(_userKey, user.toJson());
   }
 
   // Fungsi untuk membaca data user
-  static UserModel? readUser() {
-    final data = _refrenceBox.read<Map<String, dynamic>>(_userKey);
-    if (data != null) {
-      return UserModel.fromJson(data);
+  static Map<String, dynamic>? readUser() {
+    final userData = _refrenceBox.read<Map<String, dynamic>>(_userKey);
+    if (userData != null) {
+      return userData;
     }
-    return null;
+    return null; // Return null if no data is found
   }
 
   // Fungsi untuk menghapus data user
