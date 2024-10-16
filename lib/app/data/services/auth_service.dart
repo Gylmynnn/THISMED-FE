@@ -18,6 +18,7 @@ class AuthService extends GetConnect {
         final Map<String, dynamic> data = response.body['data'];
         final UserModel responseData = UserModel.fromJson(data);
         await Storages.saveUserData(responseData);
+        print(Storages.getUserId);
         // print(Storages.getUserToken);
         // print(Storages.getUserId);
         //

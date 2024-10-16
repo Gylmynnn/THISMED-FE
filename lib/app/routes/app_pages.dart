@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:thismed/app/modules/splash/bindings/splash_binding.dart';
+import 'package:thismed/app/modules/splash/views/splash_view.dart';
 
 import '../modules/auth/login/bindings/login_binding.dart';
 import '../modules/auth/login/views/login_view.dart';
@@ -18,7 +20,7 @@ class AppPages {
 
   static const INITIAL = Routes.HOME;
 
-  static final routes = [
+  static final routes = <GetPage>[
     GetPage(
       name: _Paths.HOME,
       page: () => const HomeView(),
@@ -39,5 +41,9 @@ class AppPages {
       page: () => const SetupView(),
       binding: SetupBinding(),
     ),
+    GetPage(
+        name: _Paths.SPLASH,
+        page: () => const SplashView(),
+        binding: SplashBinding())
   ];
 }

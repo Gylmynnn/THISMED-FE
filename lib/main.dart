@@ -1,13 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:thismed/app/utils/hellper/storage.dart';
 import 'package:thismed/app/utils/themes/controllers/theme_controller.dart';
 import 'package:thismed/firebase_options.dart';
 import 'app/routes/app_pages.dart';
 
 Future<void> main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -29,18 +30,11 @@ class Thismed extends GetView<ThemeController> {
           darkTheme: controller.getDarkTheme(),
           themeMode: _theTheme(),
           title: "Thismed",
-          initialRoute: _credentials(),
+          initialRoute: Routes.SPLASH,
           getPages: AppPages.routes,
         ));
   }
 
-  String _credentials() {
-    if (Storages.getUserToken != null) {
-      return Routes.HOME;
-    } else {
-      return Routes.LOGIN;
-    }
-  }
 
   ThemeMode _theTheme() {
     return controller.isDarkMode.value ? ThemeMode.dark : ThemeMode.light;

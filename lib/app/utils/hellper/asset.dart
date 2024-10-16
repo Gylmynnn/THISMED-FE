@@ -1,4 +1,5 @@
 class Assets {
+  static const String mainLogo = 'assets/images/main-logo.png';
   static const String googleLogo = 'assets/images/google-logo.png';
   static const String sendLogo = 'assets/images/send.png';
   static const String avatarImg1 = 'assets/images/image-1.png';
