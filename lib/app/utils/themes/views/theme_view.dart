@@ -5,28 +5,36 @@ import 'package:google_fonts/google_fonts.dart';
 class ThemeUtilsView {
   static ThemeData getLightTheme() {
     return ThemeData(
-        colorScheme: const ColorScheme.light(primary: Colorsss.primary),
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          scrolledUnderElevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
-        brightness: Brightness.light,
-        textTheme: GoogleFonts.latoTextTheme());
+      colorScheme: const ColorScheme.light(primary: Colorsss.primary),
+      useMaterial3: true,
+      appBarTheme: const AppBarTheme(
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
+      brightness: Brightness.light,
+      textTheme: GoogleFonts.poppinsTextTheme(
+        const TextTheme(
+          bodyMedium: TextStyle(color: Colors.black),
+        )),
+    );
   }
 
   static ThemeData getDarkTheme() {
     return ThemeData(
-        colorScheme: const ColorScheme.dark(primary: Colorsss.primary),
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          scrolledUnderElevation: 0,
-          backgroundColor: Colors.transparent,
+      colorScheme: const ColorScheme.dark(primary: Colorsss.primary),
+      useMaterial3: true,
+      appBarTheme: const AppBarTheme(
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
+      brightness: Brightness.dark,
+      textTheme: GoogleFonts.poppinsTextTheme(
+        const TextTheme(
+          bodyMedium: TextStyle(color: Colors.white),
         ),
-        brightness: Brightness.dark,
-        textTheme: GoogleFonts.latoTextTheme());
+      ),
+    );
   }
- 
 
   static Transition getDefaultTransition(String value) {
     switch (value) {

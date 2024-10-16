@@ -3,6 +3,8 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:thismed/app/utils/hellper/storage.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -52,11 +54,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAxsf-gSxczB8fWoI27JhiyfIMMoqRI9ZU',
-    appId: '1:638457051369:android:379d4740654984f2671878',
-    messagingSenderId: '638457051369',
-    projectId: 'thismed-app',
-    storageBucket: 'thismed-app.appspot.com',
+  static final FirebaseOptions android = FirebaseOptions(
+    apiKey: Envs.apiKey,
+    appId: Envs.appId,
+    messagingSenderId: Envs.messagingSenderId,
+    projectId: Envs.projectId,
+    storageBucket: Envs.storageBucket,
   );
 }

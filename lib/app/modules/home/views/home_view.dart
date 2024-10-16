@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thismed/app/components/c_card.dart';
-import 'package:thismed/app/data/events/event_pref.dart';
 import 'package:thismed/app/data/models/post_model.dart';
 import 'package:thismed/app/modules/home/controllers/home_controller.dart';
 import 'package:thismed/app/routes/app_pages.dart';
@@ -17,10 +16,12 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final themeC = Get.find<ThemeController>();
     return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-            appBar: _buildAppBar(themeC, controller),
-            body: _buildBody(controller)));
+      length: 2,
+      child: Scaffold(
+        appBar: _buildAppBar(themeC, controller),
+        body: _buildBody(controller),
+      ),
+    );
   }
 }
 
@@ -47,10 +48,12 @@ Widget _buildBody(HomeController controller) {
 PreferredSizeWidget _buildAppBar(ThemeController themeC, HomeController home) {
   return AppBar(
     actions: <Widget>[
-      IconButton(onPressed: () async {
-        await EventPref.deleteUser();
-        Get.offNamed(Routes.LOGIN);
-      }, icon: const Icon(Icons.exit_to_app)),
+      IconButton(
+          onPressed: () {
+            Storages.deleteUserData();
+            Get.offAllNamed(Routes.LOGIN);
+          },
+          icon: const Icon(Icons.exit_to_app)),
       IconButton(
         icon: Obx(() =>
             Icon(themeC.isDarkMode.value ? Icons.dark_mode : Icons.light_mode)),

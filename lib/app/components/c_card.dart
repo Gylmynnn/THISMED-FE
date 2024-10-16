@@ -37,12 +37,12 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
             Gaps.small,
             Text(
               item.users!.attribute!.username,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              style: TextStyle(color: Get.theme.colorScheme.primary),
             ),
             const Spacer(),
             Text(
               Dates.formated(item.createdAt!),
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              style: TextStyle(color: Get.theme.colorScheme.primary),
             ),
           ],
         ),
@@ -98,6 +98,7 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
             height: 42,
             child: CsButton(
               onPressed: () async {
+                // await _buildComment(context);
                 await _buildComment(item, homeC);
               },
               title: 'Comments : ${item.comments!.length.toString()}',
@@ -107,11 +108,6 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
           ),
         ],
       ),
-      // GestureDetector(
-      //     child: Text("Comments : ${item.comments!.length.toString()}"),
-      //     onTap: () async {
-      //       await _buildComment(item, homeC);
-      //     }),
       Gaps.medium,
       const Divider(
         height: 2,
@@ -123,183 +119,155 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
 }
 
 Future _buildComment(PostModel item, HomeController homeC) {
-  return Get.bottomSheet(Obx(() {
-/*     final ascc = homeC.posts; */
-/*     final desc = homeC.posts.reversed.toList(); */
-    final findcommentData = homeC.posts.firstWhere((i) => i.id == item.id);
-    final commentData = findcommentData.comments!.reversed.toList();
-    return Stack(children: [
-      Container(
-          padding: const EdgeInsets.all(20),
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(findcommentData.title),
-              Text("Comments : ${commentData.length.toString()}"),
-              Gaps.small,
-              Expanded(
-                  child: ListView.builder(
-                itemCount: commentData.length,
-                itemBuilder: (context, i) {
-                  final comment = commentData[i];
-                  return Paddings.mediumSy(Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        backgroundImage:
-                            AssetImage(comment.users!.attribute!.avatar!),
-                      ),
-                      Gaps.medium,
-                      Column(
+  return Get.bottomSheet(DefaultTextStyle(
+    style: Get.theme.textTheme.bodyMedium!,
+    child: Obx(
+      () {
+        final findcommentData = homeC.posts.firstWhere((i) => i.id == item.id);
+        final commentData = findcommentData.comments!.reversed.toList();
+        return Stack(children: [
+          Container(
+              padding: const EdgeInsets.all(20),
+              color: Get.isDarkMode ? Colors.black : Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(findcommentData.title),
+                  Text("Comments : ${commentData.length.toString()}"),
+                  Gaps.small,
+                  Expanded(
+                      child: ListView.builder(
+                    itemCount: commentData.length,
+                    itemBuilder: (context, i) {
+                      final comment = commentData[i];
+                      return Paddings.mediumSy(Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(comment.users!.attribute!.username),
-                          Container(
-                            constraints: const BoxConstraints(maxWidth: 150),
-                            child: Text(comment.content),
+                          CircleAvatar(
+                            backgroundImage:
+                                AssetImage(comment.users!.attribute!.avatar!),
                           ),
-                          Gaps.small,
-                          comment.image != ""
-                              ? Container(
-                                  height: 160,
-                                  width: 160,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          color: Colors.black, width: 2),
-                                      color: primaryColor,
-                                      image: DecorationImage(
-                                          image: NetworkImage(comment.image!))),
-                                )
-                              : const SizedBox()
+                          Gaps.medium,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(comment.users!.attribute!.username),
+                              Container(
+                                constraints:
+                                    const BoxConstraints(maxWidth: 150),
+                                child: Text(comment.content),
+                              ),
+                              Gaps.small,
+                              comment.image != ""
+
+                                  // Container(
+                                  //         height: 160,
+                                  //         width: 160,
+                                  //         decoration: BoxDecoration(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(8),
+                                  //             // border: Border.all(
+                                  //             //     color: Colors.black, width: 2),
+                                  //             color: Colors.transparent,
+                                  //             image: DecorationImage(
+                                  //                 image: NetworkImage(
+                                  //                     comment.image!))),
+                                  //       )
+
+                                  ? CachedNetworkImage(
+                                      imageUrl: comment.image!,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        height: 160,
+                                        width: 160,
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                          ),
+                                        ),
+                                      ),
+                                      placeholder: (context, url) =>
+                                          const CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          const Icon(Icons.error),
+                                    )
+                                  : const SizedBox()
+                            ],
+                          ),
+                          const Spacer(),
+                          Text(
+                            Dates.formated(comment.createdAt!),
+                            style: const TextStyle(fontSize: 12),
+                          ),
                         ],
-                      ),
-                      const Spacer(),
-                      Text(
-                        Dates.formated(comment.createdAt!),
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                    ],
-                  ));
-                },
-              )),
-              SizedBox(
-                height: 50,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: CsFormField(
-                        placeholder: 'write a comment',
-                        controller: homeC.commentC,
-                        suffixIcon: IconButton(
-                            onPressed: () async {
-                              await homeC.pickImage();
-                            },
-                            icon: const Icon(Icons.image)),
-                      ),
-                    ),
-                    Gaps.small,
-                    SizedBox(
-                      width: 60,
-                      child: CsButton(
-                          title: "",
-                          useIcon: true,
-                          icon: Assets.sendLogo,
-                          textStyle: const TextStyle(color: Colors.white),
-                          bgColor: primaryColor,
-/*                          onPressed: () => homeC.postComment(item.id), */
-                          onPressed: () async {
-                            await homeC.postComment(item.id);
-                          }),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )),
-      Positioned(
-          bottom: 80,
-          left: 20,
-          child: GetBuilder<HomeController>(
-              builder: (c) => c.image != null
-                  ? Stack(
+                      ));
+                    },
+                  )),
+                  SizedBox(
+                    height: 50,
+                    child: Row(
                       children: [
-                        Container(
-                          height: 160,
-                          width: 160,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.black, width: 2),
-                              color: primaryColor,
-                              image: DecorationImage(
-                                  image: FileImage(File(c.image!.path)))),
+                        Expanded(
+                          child: CsFormField(
+                            placeholder: 'write a comment',
+                            controller: homeC.commentC,
+                            suffixIcon: IconButton(
+                                onPressed: () async {
+                                  await homeC.pickImage();
+                                },
+                                icon: const Icon(Icons.image)),
+                          ),
                         ),
-                        Positioned(
-                            right: -8,
-                            top: -8,
-                            child: IconButton(
-                                onPressed: () => c.clearImage(),
-                                icon: const Icon(Icons.clear)))
+                        Gaps.small,
+                        SizedBox(
+                          width: 60,
+                          child: CsButton(
+                              title: "",
+                              useIcon: true,
+                              icon: Assets.sendLogo,
+                              textStyle: const TextStyle(color: Colors.white),
+                              bgColor: primaryColor,
+/*                          onPressed: () => homeC.postComment(item.id), */
+                              onPressed: () async {
+                                // await homeC.uploadImage();
+                                await homeC.postComment(item.id);
+                              }),
+                        ),
                       ],
-                    )
-                  : const SizedBox())),
-    ]);
-  }));
+                    ),
+                  ),
+                ],
+              )),
+          Positioned(
+              bottom: 80,
+              left: 20,
+              child: GetBuilder<HomeController>(
+                  builder: (c) => c.image != null
+                      ? Stack(
+                          children: [
+                            Container(
+                              height: 160,
+                              width: 160,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border:
+                                      Border.all(color: Colors.black, width: 2),
+                                  color: primaryColor,
+                                  image: DecorationImage(
+                                      image:
+                                          FileImage(File(c.filePath.value)))),
+                            ),
+                            Positioned(
+                                right: -8,
+                                top: -8,
+                                child: IconButton(
+                                    onPressed: () => c.clearImage(),
+                                    icon: const Icon(Icons.clear)))
+                          ],
+                        )
+                      : const SizedBox())),
+        ]);
+      },
+    ),
+  ));
 }
-
-
-// Expanded(
-//             child: Obx(() {
-//               final updatedPost =
-//                   homeC.posts.firstWhere((post) => post.id == item.id);
-//               return ListView.builder(
-//                 itemCount: updatedPost.comments?.length ?? 0,
-//                 itemBuilder: (context, i) {
-//                   final comment = updatedPost.comments![i];
-//                   return Paddings.mediumSy(Row(
-//                     children: [
-//                       CircleAvatar(
-//                         backgroundImage:
-//                             AssetImage(comment.users!.attribute!.avatar!),
-//                       ),
-//                       Gaps.medium,
-//                       Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Text(comment.users!.attribute!.username),
-//                           Text(comment.content),
-//                         ],
-//                       ),
-//                     ],
-//                   ));
-//                 },
-//               );
-//             }),
-//           ),
-
-
-// Widget _buildComment() {
-//   return DraggableScrollableSheet(
-//       builder: (BuildContext context, scrollController) {
-//     return Container(
-//       clipBehavior: Clip.hardEdge,
-//       decoration: BoxDecoration(
-//         color: Theme.of(context).canvasColor,
-//         borderRadius: const BorderRadius.only(
-//           topLeft: Radius.circular(25),
-//           topRight: Radius.circular(25),
-//         ),
-//       ),
-//       child: CustomScrollView(
-//         controller: scrollController,
-//         slivers: [
-//           SliverList.list(children: const [
-//             ListTile(title: Text('Jane Doe')),
-//             ListTile(title: Text('Jack reacher')),
-//           ])
-//         ],
-//       ),
-//     );
-//   });
-// }
