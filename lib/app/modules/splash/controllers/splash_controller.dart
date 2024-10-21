@@ -3,12 +3,11 @@ import 'package:thismed/app/routes/app_pages.dart';
 import 'package:thismed/app/utils/hellper/storage.dart';
 
 class SplashController extends GetxController {
-
   @override
-    void onInit() {
-      loadings();
-      super.onInit();
-    }
+  void onInit() {
+    loadings();
+    super.onInit();
+  }
 
   Future<void> loadings() async {
     await Future.delayed(
@@ -17,7 +16,7 @@ class SplashController extends GetxController {
 
   String _credentials() {
     if (Storages.getUserToken != null) {
-      return Routes.HOME;
+      return Routes.BOT_NAV;
     } else {
       return Routes.LOGIN;
     }

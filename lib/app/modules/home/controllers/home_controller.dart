@@ -2,28 +2,26 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:thismed/app/data/models/comment_model.dart';
 import 'package:thismed/app/data/models/post_model.dart';
 import 'package:thismed/app/data/services/comment_service.dart';
 import 'package:thismed/app/data/services/post_service.dart';
+import 'package:thismed/app/utils/hellper/date.dart';
 import 'dart:io';
 
 import 'package:thismed/app/utils/hellper/storage.dart';
 
 class HomeController extends GetxController {
-  final PostService http = PostService();
+  final PostService _http = PostService();
   final CommentService _http2 = CommentService();
-  final RxList<PostModel> posts = <PostModel>[].obs;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final ImagePicker _picker = ImagePicker();
-  final RxString filePath = ''.obs;
-  final RxString imgDownloadUrl = ''.obs;
-  XFile? image;
+  final RxList<PostModel> posts = <PostModel>[].obs;
+  final RxString _filePath = ''.obs;
+  final RxString _imgDownloadUrl = ''.obs;
   late TextEditingController commentC;
+  XFile? image;
   Rx<XFile>? halloWorld;
-
-
 
   @override
   void onInit() {
@@ -38,21 +36,23 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  // Function to upload image to Firebase Storage
+  set setFilePath(String value) => _filePath.value = value;
+  set setImgDownloadUrl(String value) => _imgDownloadUrl.value = value;
+  String get getImgDownloadUrl => _imgDownloadUrl.value;
+  String get getFilePath => _filePath.value;
+
   Future<void> uploadImage() async {
     try {
-      final String formattedDateTime =
-          DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-      final File imageFile = File(filePath.value); // Create File from path
-      final String fileName = filePath.value.split('/').last; // Get file name
-      final Reference storageRef = _storage
-          .ref()
-          .child('comments/${Storages.getUserId}/$formattedDateTime$fileName');
+      final String formattedDateTime = Dates.yyyyMMdd(DateTime.now());
+      final File imageFile = File(getFilePath);
+      final String fileName = getFilePath.split('/').last;
+      final String uniquePath = '$formattedDateTime$fileName';
+      final String path = 'comments/${Storages.getUserId}/$uniquePath';
+      final Reference storageRef = _storage.ref().child(path);
       final UploadTask uploadTask = storageRef.putFile(imageFile);
       final TaskSnapshot task = await uploadTask;
       final String value = await task.ref.getDownloadURL();
-      imgDownloadUrl.value = value;
-      // Get URL of uploaded image
+      setImgDownloadUrl = value;
     } catch (e) {
       throw Exception("error : $e");
     }
@@ -68,7 +68,7 @@ class HomeController extends GetxController {
       image = await _picker.pickImage(source: ImageSource.gallery);
       update();
       if (image != null) {
-        filePath.value = image!.path;
+        setFilePath = image!.path;
       } else {
         Get.snackbar("Info", "No Image Insert");
       }
@@ -80,7 +80,7 @@ class HomeController extends GetxController {
 
   Future<void> getPost() async {
     try {
-      final List<PostModel> response = await http.getPostService();
+      final List<PostModel> response = await _http.getPostService();
       posts.assignAll(response);
     } catch (e) {
       throw Exception("error :$e");
@@ -92,7 +92,7 @@ class HomeController extends GetxController {
       if (image != null) {
         await uploadImage();
         final data = CommentModel(
-            id: 0, content: commentC.text, image: imgDownloadUrl.value);
+            id: 0, content: commentC.text, image: getImgDownloadUrl);
         final response = await _http2.postCommentService(postId, data);
         final postIndex = posts.indexWhere((post) => post.id == postId);
         if (postIndex == -1) throw Exception("Post not found");

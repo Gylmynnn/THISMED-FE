@@ -26,6 +26,6 @@ class Assets {
     avatarImg9,
     avatarImg10,
     avatarImg11,
-    avatarImg12
+    avatarImg12,
   ];
 }

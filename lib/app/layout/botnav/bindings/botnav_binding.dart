@@ -10,6 +10,6 @@ class BotnavBinding extends Bindings {
     Get.lazyPut<BotnavController>(() => BotnavController());
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<ProfileController>(() => ProfileController());
-    Get.lazyPut<SearchController>(() => SearchController());
+    Get.lazyPut<SearchControllerG>(() => SearchControllerG());
   }
 }

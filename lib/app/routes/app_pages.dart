@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
-import 'package:thismed/app/modules/splash/bindings/splash_binding.dart';
-import 'package:thismed/app/modules/splash/views/splash_view.dart';
-
+import '../layout/botnav/bindings/botnav_binding.dart';
+import '../layout/botnav/views/botnav_view.dart';
+import '../modules/profile_detail/bindings/profile_detail_binding.dart';
+import '../modules/profile_detail/views/profile_detail_view.dart';
+import '../modules/splash/bindings/splash_binding.dart';
+import '../modules/splash/views/splash_view.dart';
 import '../modules/auth/login/bindings/login_binding.dart';
 import '../modules/auth/login/views/login_view.dart';
 import '../modules/auth/register/bindings/register_binding.dart';
@@ -42,8 +45,19 @@ class AppPages {
       binding: SetupBinding(),
     ),
     GetPage(
-        name: _Paths.SPLASH,
-        page: () => const SplashView(),
-        binding: SplashBinding())
+      name: _Paths.SPLASH,
+      page: () => const SplashView(),
+      binding: SplashBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE_DETAIL,
+      page: () => const ProfileDetailView(),
+      binding: ProfileDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.BOT_NAV,
+      page: () => const BotnavView(),
+      binding: BotnavBinding(),
+    ),
   ];
 }

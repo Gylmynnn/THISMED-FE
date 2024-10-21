@@ -28,15 +28,10 @@ class Thismed extends GetView<ThemeController> {
           debugShowCheckedModeBanner: false,
           theme: controller.getLightTheme(),
           darkTheme: controller.getDarkTheme(),
-          themeMode: _theTheme(),
+          themeMode: controller.getTheme(),
           title: "Thismed",
           initialRoute: Routes.SPLASH,
           getPages: AppPages.routes,
         ));
-  }
-
-
-  ThemeMode _theTheme() {
-    return controller.isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
   }
 }

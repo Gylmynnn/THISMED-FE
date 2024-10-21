@@ -13,21 +13,24 @@ class ThemeController extends GetxController {
     super.onInit();
   }
 
+  bool get getDarkMode => isDarkMode.value;
+  set setDarkMode(dynamic value) => isDarkMode.value = value;
+
   bool initThemeValue() {
-    return isDarkMode.value =
-        EventPref.readThemeBox(_themeKey, defaultValue: false);
+    return setDarkMode = EventPref.readThemeBox(_themeKey, defaultValue: false);
   }
 
   void switchTheme() {
-    Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
+    Get.changeThemeMode(getDarkMode ? ThemeMode.dark : ThemeMode.light);
   }
 
   void toggleTheme() {
     isDarkMode.toggle();
-    EventPref.writeThemeBox(_themeKey, isDarkMode.value);
+    EventPref.writeThemeBox(_themeKey, getDarkMode);
     switchTheme();
   }
 
+  ThemeMode getTheme() => getDarkMode ? ThemeMode.dark : ThemeMode.light;
   ThemeData getDarkTheme() => ThemeUtilsView.getDarkTheme();
   ThemeData getLightTheme() => ThemeUtilsView.getLightTheme();
 }

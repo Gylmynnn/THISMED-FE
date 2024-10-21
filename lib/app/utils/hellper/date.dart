@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Dates {
   static String formated(String dateTime) {
     final DateTime getDate = DateTime.parse(dateTime);
@@ -14,5 +16,10 @@ class Dates {
       final days = differenceDate.inDays;
       return days == 1 ? '1 day ago' : '$days days ago';
     }
+  }
+
+
+  static String yyyyMMdd(DateTime date) {
+    return DateFormat('yyyyMMdd_HHmmss').format(date);
   }
 }
