@@ -1,4 +1,3 @@
-import 'package:thismed/app/data/events/event_pref.dart';
 import 'package:thismed/app/data/models/user_model.dart';
 import 'package:get/get.dart';
 import 'package:thismed/app/utils/hellper/storage.dart';
@@ -6,7 +5,7 @@ import 'package:thismed/app/utils/hellper/storage.dart';
 class AuthService extends GetConnect {
   Future<UserModel> loginService(UserModel user) async {
     try {
-      final response = await post(
+      final Response<dynamic> response = await post(
         'http://10.0.2.2:3000/api/login',
         {
           'email': user.email,
@@ -18,15 +17,6 @@ class AuthService extends GetConnect {
         final Map<String, dynamic> data = response.body['data'];
         final UserModel responseData = UserModel.fromJson(data);
         await Storages.saveUserData(responseData);
-        print(Storages.getUserId);
-        // print(Storages.getUserToken);
-        // print(Storages.getUserId);
-        //
- 
-
-        // final test = await EventPref.readUser();
-        // if (test != null) print(test.id);
-
         return responseData;
       } else {
         throw Exception("error");

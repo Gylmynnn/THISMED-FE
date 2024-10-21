@@ -7,7 +7,7 @@ class AttributeService extends GetConnect {
   
    Future<AttributeModel> attributeService(AttributeModel item) async {
     try {
-      final response = await post(
+      final Response<dynamic> response = await post(
         headers: {'Authorization': 'Bearer ${Storages.getUserToken}'},
         'http://10.0.2.2:3000/api/attribute?userId=${Storages.getUserId}',
         {'username': item.username, 'avatar': item.avatar, 'bio': item.bio},

@@ -6,6 +6,7 @@ import 'package:thismed/app/components/c_button.dart';
 import 'package:thismed/app/components/c_form.dart';
 import 'package:thismed/app/data/models/post_model.dart';
 import 'package:thismed/app/modules/home/controllers/home_controller.dart';
+import 'package:thismed/app/routes/app_pages.dart';
 import 'package:thismed/app/utils/hellper/asset.dart';
 import 'package:thismed/app/utils/hellper/date.dart';
 import 'package:thismed/app/utils/hellper/layout.dart';
@@ -19,7 +20,10 @@ class CsCard extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Paddings.mediumAll(
-        Container(child: _buildBody(context, item, controller)));
+      Container(
+        child: _buildBody(context, item, controller),
+      ),
+    );
   }
 }
 
@@ -31,8 +35,11 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
       Paddings.smallSx(
         Row(
           children: [
-            CircleAvatar(
-              backgroundImage: AssetImage(item.users!.attribute!.avatar!),
+            InkWell(
+              onTap: () => Get.toNamed(Routes.PROFILE_DETAIL, arguments: item),
+              child: CircleAvatar(
+                backgroundImage: AssetImage(item.users!.attribute!.avatar!),
+              ),
             ),
             Gaps.small,
             Text(
@@ -73,11 +80,13 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
         spacing: 6,
         children: List.generate(item.category!.length, (i) {
           return Chip(
-              side: BorderSide.none,
-              backgroundColor: secondaryTextColor,
-              label: Text("# ${item.category![i]}"),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)));
+            side: BorderSide.none,
+            backgroundColor: secondaryTextColor,
+            label: Text("# ${item.category![i]}"),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+          );
         }),
       ),
       Gaps.medium,
@@ -119,129 +128,118 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
 }
 
 Future _buildComment(PostModel item, HomeController homeC) {
-  return Get.bottomSheet(DefaultTextStyle(
-    style: Get.theme.textTheme.bodyMedium!,
-    child: Obx(
-      () {
-        final findcommentData = homeC.posts.firstWhere((i) => i.id == item.id);
-        final commentData = findcommentData.comments!.reversed.toList();
-        return Stack(children: [
-          Container(
-              padding: const EdgeInsets.all(20),
-              color: Get.isDarkMode ? Colors.black : Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(findcommentData.title),
-                  Text("Comments : ${commentData.length.toString()}"),
-                  Gaps.small,
-                  Expanded(
-                      child: ListView.builder(
-                    itemCount: commentData.length,
-                    itemBuilder: (context, i) {
-                      final comment = commentData[i];
-                      return Paddings.mediumSy(Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            backgroundImage:
-                                AssetImage(comment.users!.attribute!.avatar!),
-                          ),
-                          Gaps.medium,
-                          Column(
+  return Get.bottomSheet(
+    DefaultTextStyle(
+      style: Get.theme.textTheme.bodyMedium!,
+      child: Obx(
+        () {
+          final findcommentData =
+              homeC.posts.firstWhere((i) => i.id == item.id);
+          final commentData = findcommentData.comments!.reversed.toList();
+          return Stack(
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(20),
+                  color: Get.isDarkMode ? Colors.black : Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(findcommentData.title),
+                      Text("Comments : ${commentData.length.toString()}"),
+                      Gaps.small,
+                      Expanded(
+                          child: ListView.builder(
+                        itemCount: commentData.length,
+                        itemBuilder: (context, i) {
+                          final comment = commentData[i];
+                          return Paddings.mediumSy(Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(comment.users!.attribute!.username),
-                              Container(
-                                constraints:
-                                    const BoxConstraints(maxWidth: 150),
-                                child: Text(comment.content),
+                              CircleAvatar(
+                                backgroundImage: AssetImage(
+                                    comment.users!.attribute!.avatar!),
                               ),
-                              Gaps.small,
-                              comment.image != ""
-
-                                  // Container(
-                                  //         height: 160,
-                                  //         width: 160,
-                                  //         decoration: BoxDecoration(
-                                  //             borderRadius:
-                                  //                 BorderRadius.circular(8),
-                                  //             // border: Border.all(
-                                  //             //     color: Colors.black, width: 2),
-                                  //             color: Colors.transparent,
-                                  //             image: DecorationImage(
-                                  //                 image: NetworkImage(
-                                  //                     comment.image!))),
-                                  //       )
-
-                                  ? CachedNetworkImage(
-                                      imageUrl: comment.image!,
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        height: 160,
-                                        width: 160,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
+                              Gaps.medium,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(comment.users!.attribute!.username),
+                                  Container(
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 150),
+                                    child: Text(comment.content),
+                                  ),
+                                  Gaps.small,
+                                  comment.image != ""
+                                      ? CachedNetworkImage(
+                                          imageUrl: comment.image!,
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
+                                            height: 160,
+                                            width: 160,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                      placeholder: (context, url) =>
-                                          const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    )
-                                  : const SizedBox()
+                                          placeholder: (context, url) =>
+                                              const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        )
+                                      : const SizedBox()
+                                ],
+                              ),
+                              const Spacer(),
+                              Text(
+                                Dates.formated(comment.createdAt!),
+                                style: const TextStyle(fontSize: 12),
+                              ),
                             ],
-                          ),
-                          const Spacer(),
-                          Text(
-                            Dates.formated(comment.createdAt!),
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      ));
-                    },
-                  )),
-                  SizedBox(
-                    height: 50,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: CsFormField(
-                            placeholder: 'write a comment',
-                            controller: homeC.commentC,
-                            suffixIcon: IconButton(
+                          ));
+                        },
+                      )),
+                      SizedBox(
+                        height: 50,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: CsFormField(
+                                placeholder: 'write a comment',
+                                controller: homeC.commentC,
+                                suffixIcon: IconButton(
+                                  onPressed: () async {
+                                    await homeC.pickImage();
+                                  },
+                                  icon: const Icon(Icons.image),
+                                ),
+                              ),
+                            ),
+                            Gaps.small,
+                            SizedBox(
+                              width: 60,
+                              child: CsButton(
+                                title: "",
+                                useIcon: true,
+                                icon: Assets.sendLogo,
+                                textStyle: const TextStyle(color: Colors.white),
+                                bgColor: primaryColor,
                                 onPressed: () async {
-                                  await homeC.pickImage();
+                                  await homeC.postComment(item.id);
                                 },
-                                icon: const Icon(Icons.image)),
-                          ),
+                              ),
+                            ),
+                          ],
                         ),
-                        Gaps.small,
-                        SizedBox(
-                          width: 60,
-                          child: CsButton(
-                              title: "",
-                              useIcon: true,
-                              icon: Assets.sendLogo,
-                              textStyle: const TextStyle(color: Colors.white),
-                              bgColor: primaryColor,
-/*                          onPressed: () => homeC.postComment(item.id), */
-                              onPressed: () async {
-                                // await homeC.uploadImage();
-                                await homeC.postComment(item.id);
-                              }),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )),
-          Positioned(
-              bottom: 80,
-              left: 20,
-              child: GetBuilder<HomeController>(
+                      ),
+                    ],
+                  )),
+              Positioned(
+                bottom: 80,
+                left: 20,
+                child: GetBuilder<HomeController>(
                   builder: (c) => c.image != null
                       ? Stack(
                           children: [
@@ -249,25 +247,34 @@ Future _buildComment(PostModel item, HomeController homeC) {
                               height: 160,
                               width: 160,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border:
-                                      Border.all(color: Colors.black, width: 2),
-                                  color: primaryColor,
-                                  image: DecorationImage(
-                                      image:
-                                          FileImage(File(c.filePath.value)))),
+                                borderRadius: BorderRadius.circular(8),
+                                border:
+                                    Border.all(color: Colors.black, width: 2),
+                                color: primaryColor,
+                                image: DecorationImage(
+                                  image: FileImage(
+                                    File(c.getFilePath),
+                                  ),
+                                ),
+                              ),
                             ),
                             Positioned(
-                                right: -8,
-                                top: -8,
-                                child: IconButton(
-                                    onPressed: () => c.clearImage(),
-                                    icon: const Icon(Icons.clear)))
+                              right: -8,
+                              top: -8,
+                              child: IconButton(
+                                onPressed: () => c.clearImage(),
+                                icon: const Icon(Icons.clear),
+                              ),
+                            ),
                           ],
                         )
-                      : const SizedBox())),
-        ]);
-      },
+                      : const SizedBox(),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     ),
-  ));
+  );
 }

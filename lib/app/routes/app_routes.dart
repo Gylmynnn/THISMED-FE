@@ -11,6 +11,8 @@ abstract class Routes {
   static const REGISTER = _Paths.REGISTER;
   static const SETUP = _Paths.SETUP;
   static const SPLASH = _Paths.SPLASH;
+  static const PROFILE_DETAIL = _Paths.PROFILE_DETAIL;
+  static const BOT_NAV = _Paths.BOT_NAV;
 }
 
 abstract class _Paths {
@@ -21,4 +23,6 @@ abstract class _Paths {
   static const REGISTER = '/register';
   static const SETUP = '/setup';
   static const SPLASH = '/splash';
+  static const PROFILE_DETAIL = '/profile-detail';
+  static const BOT_NAV = '/bottom_navbar';
 }

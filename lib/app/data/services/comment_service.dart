@@ -6,7 +6,7 @@ class CommentService extends GetConnect {
   // GET POST DATAS
   Future<CommentModel> postCommentService(int postId, CommentModel item) async {
     try {
-      final response = await post(
+      final Response<dynamic> response = await post(
           headers: {'Authorization': "Bearer ${Storages.getUserToken}"},
           'http://10.0.2.2:3000/api/comment?userId=${Storages.getUserId}&postId=$postId',
           {
@@ -14,8 +14,8 @@ class CommentService extends GetConnect {
             "image": item.image,
           });
       if (response.statusCode == 201) {
-        final data = response.body['data'];
-        final responseData = CommentModel.fromJson(data);
+        final Map<String, dynamic> data = response.body['data'];
+        final CommentModel responseData = CommentModel.fromJson(data);
         return responseData;
       } else {
         throw Exception("error :");
