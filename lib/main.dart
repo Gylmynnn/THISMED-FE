@@ -23,15 +23,17 @@ class Thismed extends GetView<ThemeController> {
   const Thismed({super.key});
   @override
   Widget build(BuildContext context) {
-    return Obx(() => GetMaterialApp(
-          defaultTransition: Transition.rightToLeftWithFade,
-          debugShowCheckedModeBanner: false,
-          theme: controller.getLightTheme(),
-          darkTheme: controller.getDarkTheme(),
-          themeMode: controller.getTheme(),
-          title: "Thismed",
-          initialRoute: Routes.SPLASH,
-          getPages: AppPages.routes,
-        ));
+    return Obx(
+      () => GetMaterialApp(
+        defaultTransition: Transition.rightToLeftWithFade,
+        debugShowCheckedModeBanner: false,
+        theme: controller.getLightTheme(),
+        darkTheme: controller.getDarkTheme(),
+        themeMode: controller.getTheme(),
+        title: "THISMED",
+        initialRoute: Routes.SPLASH,
+        getPages: AppPages.routes,
+      ),
+    );
   }
 }
