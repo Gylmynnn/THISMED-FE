@@ -45,6 +45,7 @@ Widget _buildBody(HomeController controller) {
   });
 }
 
+
 PreferredSizeWidget _buildAppBar(ThemeController themeC, HomeController home) {
   return AppBar(
     actions: <Widget>[
@@ -83,7 +84,7 @@ PreferredSizeWidget _buildAppBar(ThemeController themeC, HomeController home) {
             children: [
               Icon(FontAwesomeIcons.fire),
               Gap(12),
-              Text('Populer'),
+              Text('Following'),
             ],
           ),
         ),

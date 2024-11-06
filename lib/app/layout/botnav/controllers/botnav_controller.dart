@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thismed/app/modules/home/views/home_view.dart';
 import 'package:thismed/app/modules/search/views/search_view.dart';
@@ -12,6 +11,7 @@ class BotnavController extends GetxController {
     const HomeView(),
     const SearchView(),
   ].obs;
+
 
   final RxList<Map<String, dynamic>> navs = <Map<String, dynamic>>[
     {

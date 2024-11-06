@@ -1,4 +1,5 @@
 import 'package:thismed/app/data/models/comment_model.dart';
+import 'package:thismed/app/data/models/intraction_model.dart';
 import 'package:thismed/app/data/models/user_model.dart';
 
 class PostModel {
@@ -11,6 +12,7 @@ class PostModel {
   String? userId;
   UserModel? users;
   List<CommentModel>? comments;
+  List<IntractionModel>? intractions;
 
   PostModel({
     required this.id,
@@ -22,13 +24,25 @@ class PostModel {
     this.userId,
     this.users,
     this.comments,
+    this.intractions,
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
     List<CommentModel>? comments = [];
     if (json['comments'] != null) {
       comments = List<CommentModel>.from(
-          json['comments'].map((json) => CommentModel.fromJson(json)));
+        json['comments'].map(
+          (json) => CommentModel.fromJson(json),
+        ),
+      );
+    }
+    List<IntractionModel>? intractions = [];
+    if (json['intractions'] != null) {
+      intractions = List<IntractionModel>.from(
+        json['intractions'].map(
+          (json) => IntractionModel.fromJson(json),
+        ),
+      );
     }
     return PostModel(
       id: json['id'] ?? '',
@@ -40,6 +54,7 @@ class PostModel {
       userId: json['userId'] ?? '',
       users: json['users'] != null ? UserModel.fromJson(json['users']) : null,
       comments: comments,
+      intractions: intractions,
     );
   }
 
@@ -54,6 +69,7 @@ class PostModel {
       'userId': userId ?? '',
       'users': users ?? '',
       'comments': comments ?? '',
+      'intractions': intractions ?? '',
     };
   }
 }
