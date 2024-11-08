@@ -14,21 +14,23 @@ import 'package:thismed/app/utils/hellper/layout.dart';
 import 'package:thismed/app/utils/themes/views/theme_view.dart';
 
 class CsCard extends GetView<HomeController> {
-  const CsCard({super.key, required this.item});
+  const CsCard({super.key, required this.item, this.isClickedProfile = true});
 
   final PostModel item;
+  final bool isClickedProfile;
 
   @override
   Widget build(BuildContext context) {
     return Paddings.mediumAll(
       Container(
-        child: _buildBody(context, item, controller),
+        child: _buildBody(context, item, controller, isClickedProfile),
       ),
     );
   }
 }
 
-Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
+Widget _buildBody(BuildContext context, PostModel item, HomeController homeC,
+    bool isClickedProfile) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,12 +38,7 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
       Paddings.smallSx(
         Row(
           children: [
-            InkWell(
-              onTap: () => Get.toNamed(Routes.PROFILE_DETAIL, arguments: item),
-              child: CircleAvatar(
-                backgroundImage: AssetImage(item.users!.attribute!.avatar!),
-              ),
-            ),
+            _isClickedUserProfile(item, isClickedProfile),
             Gaps.small,
             Text(
               item.users!.attribute!.username,
@@ -109,7 +106,7 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
             height: 42,
             child: CsButton(
               title:
-                  '👍: ${item.intractions!.where((e) => e.liked == true).length}',
+                  '👍: ${item.intractions!.where((e) => e.liked == true).length.toString()}',
               useBorder: true,
               borderColor: primaryColor,
               onPressed: () async {
@@ -143,7 +140,7 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC) {
             height: 42,
             child: CsButton(
               title:
-                  '👎: ${item.intractions!.where((e) => e.liked == false).length}',
+                  '👎: ${item.intractions!.where((e) => e.liked == false).length.toString()}',
               useBorder: true,
               borderColor: primaryColor,
               onPressed: () async {
@@ -301,6 +298,21 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
       ),
     ),
   );
+}
+
+Widget _isClickedUserProfile(PostModel item, bool isClickedProfile) {
+  return isClickedProfile
+      ? InkWell(
+          onTap: () {
+            Get.toNamed(Routes.PROFILE_DETAIL, arguments: item);
+          },
+          child: CircleAvatar(
+            backgroundImage: AssetImage(item.users!.attribute!.avatar!),
+          ),
+        )
+      : CircleAvatar(
+          backgroundImage: AssetImage(item.users!.attribute!.avatar!),
+        );
 }
 
 Widget _isUserPickImage(HomeController c) {

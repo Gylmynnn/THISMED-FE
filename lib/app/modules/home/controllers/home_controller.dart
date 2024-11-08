@@ -10,7 +10,6 @@ import 'package:thismed/app/data/services/interaction_service.dart';
 import 'package:thismed/app/data/services/post_service.dart';
 import 'package:thismed/app/utils/hellper/date.dart';
 import 'package:thismed/app/utils/hellper/storage.dart';
-import 'package:image/image.dart' as img;
 import 'package:get/get.dart';
 import 'dart:io';
 
@@ -36,6 +35,12 @@ class HomeController extends GetxController {
     commentC = TextEditingController();
     getPost();
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    posts.refresh();
+    super.onReady();
   }
 
   @override
@@ -146,7 +151,7 @@ class HomeController extends GetxController {
       final List<PostModel> response = await _http.getPostService();
       posts.assignAll(response);
     } catch (e) {
-      throw Exception("error :$e");
+      throw Exception(e);
     }
   }
 

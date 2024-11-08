@@ -19,7 +19,10 @@ class HomeView extends GetView<HomeController> {
       length: 2,
       child: Scaffold(
         appBar: _buildAppBar(themeC, controller),
-        body: _buildBody(controller),
+        body: RefreshIndicator(
+          onRefresh: () => controller.getPost(),
+          child: _buildBody(controller),
+        ),
       ),
     );
   }
@@ -45,10 +48,14 @@ Widget _buildBody(HomeController controller) {
   });
 }
 
-
 PreferredSizeWidget _buildAppBar(ThemeController themeC, HomeController home) {
   return AppBar(
     actions: <Widget>[
+      IconButton(
+          onPressed: () {
+            // PostService().getPostServiceUserId();
+          },
+          icon: const Icon(Icons.home)),
       IconButton(
           onPressed: () {
             Storages.deleteUserData();
