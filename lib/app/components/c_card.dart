@@ -215,40 +215,52 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
                     Text("Comments : ${commentData.length.toString()}"),
                     Gaps.small,
                     Expanded(
-                        child: ListView.builder(
-                      itemCount: commentData.length,
-                      itemBuilder: (context, i) {
-                        final comment = commentData[i];
-                        return Paddings.mediumSy(Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              backgroundImage:
-                                  AssetImage(comment.users!.attribute!.avatar!),
-                            ),
-                            Gaps.medium,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(comment.users!.attribute!.username),
-                                Container(
-                                  constraints:
-                                      const BoxConstraints(maxWidth: 150),
-                                  child: Text(comment.content),
-                                ),
-                                Gaps.small,
-                                _isCommentHasImage(comment)
-                              ],
-                            ),
-                            const Spacer(),
-                            Text(
-                              Dates.formated(comment.createdAt!),
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ));
-                      },
-                    )),
+                        child: commentData.isNotEmpty
+                            ? ListView.builder(
+                                itemCount: commentData.length,
+                                itemBuilder: (context, i) {
+                                  final comment = commentData[i];
+                                  return Paddings.mediumSy(Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Get.toNamed(
+                                            Routes.PROFILE_DETAIL,
+                                            arguments: findcommentData),
+                                        child: CircleAvatar(
+                                          backgroundImage: AssetImage(comment
+                                              .users!.attribute!.avatar!),
+                                        ),
+                                      ),
+                                      Gaps.medium,
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(comment
+                                              .users!.attribute!.username),
+                                          Container(
+                                            constraints: const BoxConstraints(
+                                                maxWidth: 150),
+                                            child: Text(comment.content),
+                                          ),
+                                          Gaps.small,
+                                          _isCommentHasImage(comment)
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        Dates.formated(comment.createdAt!),
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ],
+                                  ));
+                                },
+                              )
+                            : const Center(
+                                child: Text("Not Have Comment "),
+                              )),
                     SizedBox(
                       height: 50,
                       child: Row(

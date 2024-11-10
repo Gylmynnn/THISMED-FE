@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:thismed/app/modules/post/controllers/post_controller.dart';
@@ -7,6 +8,6 @@ class PostView extends GetView<PostController> {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold();
   }
 }

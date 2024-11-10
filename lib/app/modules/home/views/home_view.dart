@@ -18,6 +18,7 @@ class HomeView extends GetView<HomeController> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        drawer: _buildDrawer(),
         appBar: _buildAppBar(themeC, controller),
         body: RefreshIndicator(
           onRefresh: () => controller.getPost(),
@@ -46,6 +47,12 @@ Widget _buildBody(HomeController controller) {
           })
     ]);
   });
+}
+
+Widget _buildDrawer() {
+  return const Drawer(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+  );
 }
 
 PreferredSizeWidget _buildAppBar(ThemeController themeC, HomeController home) {
