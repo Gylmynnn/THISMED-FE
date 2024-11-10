@@ -10,9 +10,10 @@ import 'package:thismed/app/data/services/interaction_service.dart';
 import 'package:thismed/app/data/services/post_service.dart';
 import 'package:thismed/app/utils/hellper/date.dart';
 import 'package:thismed/app/utils/hellper/storage.dart';
-import 'package:image/image.dart' as img;
 import 'package:get/get.dart';
 import 'dart:io';
+
+import 'package:thismed/app/utils/hellper/utils.dart';
 
 class HomeController extends GetxController {
   final PostService _http = PostService();
@@ -27,13 +28,19 @@ class HomeController extends GetxController {
   final RxBool _isDisLiked = false.obs;
   late TextEditingController commentC;
   XFile? image;
-  Rx<XFile>? halloWorld;
+  // Rx<XFile>? halloWorld;
 
   @override
   void onInit() {
     commentC = TextEditingController();
     getPost();
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    posts.refresh();
+    super.onReady();
   }
 
   @override
@@ -54,13 +61,6 @@ class HomeController extends GetxController {
   String get getImgDownloadUrl => _imgDownloadUrl.value;
   String get getFilePath => _filePath.value;
 
-  Future<List<int>> compressImage(File file) async {
-    final img.Image? originalImage = img.decodeImage(file.readAsBytesSync());
-    final resizedImage = img.encodeJpg(originalImage!,
-        quality: 50); // Resize width, keep aspect ratio
-    return resizedImage; // Compress with 80% quality
-  }
-
   Future<void> uploadImage() async {
     try {
       final String formattedDateTime = Dates.yyyyMMdd(DateTime.now());
@@ -69,7 +69,7 @@ class HomeController extends GetxController {
       final String uniquePath = '$formattedDateTime$fileName';
       final String path = 'comments/${Storages.getUserId}/$uniquePath';
       final Reference storageRef = _storage.ref().child(path);
-      final List<int> compressed = await compressImage(imageFile);
+      final List<int> compressed = await Utils.compressImage(imageFile, 40);
       final UploadTask uploadTask =
           storageRef.putData(Uint8List.fromList(compressed));
       final TaskSnapshot task = await uploadTask;
@@ -151,7 +151,7 @@ class HomeController extends GetxController {
       final List<PostModel> response = await _http.getPostService();
       posts.assignAll(response);
     } catch (e) {
-      throw Exception("error :$e");
+      throw Exception(e);
     }
   }
 
