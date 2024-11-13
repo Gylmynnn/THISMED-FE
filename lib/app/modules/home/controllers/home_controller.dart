@@ -16,6 +16,7 @@ import 'dart:io';
 import 'package:thismed/app/utils/hellper/utils.dart';
 
 class HomeController extends GetxController {
+  //---------------------------------------
   final PostService _http = PostService();
   final CommentService _http2 = CommentService();
   final InteractionService _http3 = InteractionService();
@@ -26,9 +27,27 @@ class HomeController extends GetxController {
   final RxString _imgDownloadUrl = ''.obs;
   final RxBool _isLiked = false.obs;
   final RxBool _isDisLiked = false.obs;
+  final RxBool _isLoading = false.obs;
   late TextEditingController commentC;
   XFile? image;
   // Rx<XFile>? halloWorld;
+
+  //-----------------------------------------
+
+  set setIsLoading(bool value) => _isLoading.value = value;
+  set setIsLiked(bool value) => _isLiked.value = value;
+  set setIsDisLiked(bool value) => _isDisLiked.value = value;
+  set setFilePath(String value) => _filePath.value = value;
+  set setImgDownloadUrl(String value) => _imgDownloadUrl.value = value;
+  bool get getIsLoading => _isLoading.value;
+  bool get getIsLiked => _isLiked.value;
+  bool get getIsDisLiked => _isDisLiked.value;
+  Rx<bool> get getToggleIsLiked => _isLiked.toggle();
+  Rx<bool> get getToggleIsDisLiked => _isDisLiked.toggle();
+  String get getImgDownloadUrl => _imgDownloadUrl.value;
+  String get getFilePath => _filePath.value;
+
+  //------------------------------------------
 
   @override
   void onInit() {
@@ -49,17 +68,7 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  set setIsLiked(bool value) => _isLiked.value = value;
-  set setIsDisLiked(bool value) => _isDisLiked.value = value;
-  set setFilePath(String value) => _filePath.value = value;
-  set setImgDownloadUrl(String value) => _imgDownloadUrl.value = value;
-  bool get getIsLiked => _isLiked.value;
-  bool get getIsDisLiked => _isDisLiked.value;
-  Rx<bool> get getToggleIsLiked => _isLiked.toggle();
-  Rx<bool> get getToggleIsDisLiked => _isDisLiked.toggle();
-
-  String get getImgDownloadUrl => _imgDownloadUrl.value;
-  String get getFilePath => _filePath.value;
+  //-------------------------------------
 
   Future<void> uploadImage() async {
     try {
@@ -147,11 +156,14 @@ class HomeController extends GetxController {
   }
 
   Future<void> getPost() async {
+    setIsLoading = true;
     try {
       final List<PostModel> response = await _http.getPostService();
       posts.assignAll(response);
     } catch (e) {
       throw Exception(e);
+    } finally {
+      setIsLoading = false;
     }
   }
 
