@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thismed/app/components/c_button.dart';
@@ -97,32 +97,10 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC,
             height: 42,
             child: CsButton(
               title:
-                  '👍: ${item.intractions!.where((e) => e.liked == true).length.toString()}',
+                  '👍: ${item.intractions!.where((e) => e.liked == true).length}',
               useBorder: true,
               borderColor: primaryColor,
-              onPressed: () async {
-                homeC.getToggleIsLiked;
-                homeC.setIsDisLiked = false;
-                final int interactionIndex = item.intractions!
-                    .indexWhere((i) => i.liked == true || i.liked == false);
-
-                if (interactionIndex != -1) {
-                  final intractId = item.intractions![interactionIndex].id;
-
-                  if (item.intractions![interactionIndex].liked == true) {
-                    await homeC.deleteIntraction(intractId, item.id);
-                    homeC.setIsLiked = false;
-                  } else {
-                    await homeC.updateIntraction(intractId, item.id, true);
-                    homeC.setIsLiked = true;
-                  }
-                } else {
-                  await homeC.liked(item.id);
-                  homeC.setIsLiked = true;
-                }
-
-                homeC.getToggleIsLiked;
-              },
+              onPressed: () => homeC.toggleLiked(item),
             ),
           ),
           Gaps.small,
@@ -131,32 +109,10 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC,
             height: 42,
             child: CsButton(
               title:
-                  '👎: ${item.intractions!.where((e) => e.liked == false).length.toString()}',
+                  '👎: ${item.intractions!.where((e) => e.liked == false).length}',
               useBorder: true,
               borderColor: primaryColor,
-              onPressed: () async {
-                homeC.getToggleIsDisLiked;
-                homeC.setIsLiked = false;
-                final int interactionIndex = item.intractions!
-                    .indexWhere((i) => i.liked == false || i.liked == true);
-
-                if (interactionIndex != -1) {
-                  final intractId = item.intractions![interactionIndex].id;
-
-                  if (item.intractions![interactionIndex].liked == false) {
-                    await homeC.deleteIntraction(intractId, item.id);
-                    homeC.setIsDisLiked = false;
-                  } else {
-                    await homeC.updateIntraction(intractId, item.id, false);
-                    homeC.setIsDisLiked = true;
-                  }
-                } else {
-                  await homeC.disLiked(item.id);
-                  homeC.setIsDisLiked = true;
-                }
-
-                homeC.getToggleIsDisLiked;
-              },
+              onPressed: () => homeC.toggleDisLiked(item),
             ),
           ),
           Gaps.small,
@@ -164,11 +120,8 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC,
             width: Get.width / 3,
             height: 42,
             child: CsButton(
-              onPressed: () async {
-                // await _buildComment(context);
-                await _buildComment(item, homeC);
-              },
-              title: 'Comments : ${item.comments!.length.toString()}',
+              onPressed: () => _buildComment(item, homeC),
+              title: 'Comments : ${item.comments!.length}',
               useBorder: true,
               borderColor: primaryColor,
             ),
@@ -204,7 +157,7 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(findcommentData.title),
-                    Text("Comments : ${commentData.length.toString()}"),
+                    Text("Comments : ${commentData.length}"),
                     Gaps.small,
                     Expanded(
                       child: _isHasComment(commentData),
@@ -218,10 +171,8 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
                               placeholder: 'write a comment',
                               controller: homeC.commentC,
                               suffixIcon: IconButton(
-                                onPressed: () async {
-                                  await homeC.pickImage();
-                                },
-                                icon: const Icon(Icons.image),
+                                onPressed: () => homeC.pickImage(),
+                                icon: const Icon(FluentIcons.image_24_regular),
                               ),
                             ),
                           ),
@@ -231,12 +182,10 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
                             child: CsButton(
                               title: "",
                               useIcon: true,
-                              icon: Assets.sendLogo,
+                              iconAssetPath: Assets.sendLogo,
                               textStyle: const TextStyle(color: Colors.white),
                               bgColor: primaryColor,
-                              onPressed: () async {
-                                await homeC.postComment(item.id);
-                              },
+                              onPressed: () => homeC.postComment(item.id),
                             ),
                           ),
                         ],
@@ -352,6 +301,11 @@ Widget _isUserPickImage(HomeController c) {
 
 Widget _isCommentHasImage(CommentModel comment) {
   return comment.image != ""
-    ? CImage(imgUrl: comment.image!, width: 160, hight: 160, boxFit: BoxFit.fill,)
+      ? CImage(
+          imgUrl: comment.image!,
+          width: 160,
+          hight: 160,
+          boxFit: BoxFit.fill,
+        )
       : const SizedBox();
 }

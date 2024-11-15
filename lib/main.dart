@@ -24,7 +24,7 @@ class Thismed extends GetView<ThemeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => GetMaterialApp(                 
+      () => GetMaterialApp(                  
         defaultTransition: Transition.rightToLeftWithFade,
         debugShowCheckedModeBanner: false,
         theme: controller.getLightTheme(),

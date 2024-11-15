@@ -9,11 +9,10 @@ class UserModel {
   String? updatedAt;
   AttributeModel? attribute;
 
-
   UserModel({
     required this.id,
     required this.email,
-     this.password,
+    this.password,
     this.token,
     this.createdAt,
     this.updatedAt,
@@ -28,7 +27,9 @@ class UserModel {
       token: json['token'] ?? '',
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
-      attribute: json['attribute'] != null ? AttributeModel.fromJson(json['attribute']) : null,
+      attribute: json['attribute'] != null
+          ? AttributeModel.fromJson(json['attribute'])
+          : null,
     );
   }
 
@@ -40,7 +41,7 @@ class UserModel {
       'token': token ?? '',
       'createdAt': createdAt ?? '',
       'updatedAt': updatedAt ?? '',
-      'attribute' : attribute ?? '' 
+      'attribute': attribute ?? ''
     };
   }
 }

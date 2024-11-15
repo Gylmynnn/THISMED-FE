@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:thismed/app/components/c_button.dart';
 import 'package:thismed/app/components/c_form.dart';
-import 'package:thismed/app/data/events/event_pref.dart';
 import 'package:thismed/app/modules/auth/login/controllers/login_controller.dart';
 import 'package:thismed/app/routes/app_pages.dart';
 import 'package:thismed/app/utils/hellper/layout.dart';
@@ -100,7 +99,7 @@ Form _buildForm(LoginController controller, GlobalKey<FormState> key) {
             title: 'Google',
             useBorder: true,
             useIcon: true,
-            icon: ThemeUtilsView.logoGoogle,
+            iconAssetPath: ThemeUtilsView.logoGoogle,
             borderColor: primaryColor,
             onPressed: () => Get.toNamed(Routes.HOME),
             textStyle: primaryTextStyle.copyWith(

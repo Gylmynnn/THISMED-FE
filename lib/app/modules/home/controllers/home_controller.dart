@@ -25,6 +25,8 @@ class HomeController extends GetxController {
   final RxList<PostModel> posts = <PostModel>[].obs;
   final RxString _filePath = ''.obs;
   final RxString _imgDownloadUrl = ''.obs;
+  final RxInt _likeCount = 0.obs;
+  final RxInt _disLikeCount = 0.obs;
   final RxBool _isLiked = false.obs;
   final RxBool _isDisLiked = false.obs;
   final RxBool _isLoading = false.obs;
@@ -33,12 +35,16 @@ class HomeController extends GetxController {
   // Rx<XFile>? halloWorld;
 
   //-----------------------------------------
-
+  set setLikedCount(int value) => _likeCount.value = value;
+  set setDisLikedCount(int value) => _disLikeCount.value = value;
   set setIsLoading(bool value) => _isLoading.value = value;
   set setIsLiked(bool value) => _isLiked.value = value;
   set setIsDisLiked(bool value) => _isDisLiked.value = value;
   set setFilePath(String value) => _filePath.value = value;
   set setImgDownloadUrl(String value) => _imgDownloadUrl.value = value;
+
+  //-----------------------------------------
+
   bool get getIsLoading => _isLoading.value;
   bool get getIsLiked => _isLiked.value;
   bool get getIsDisLiked => _isDisLiked.value;
@@ -46,6 +52,8 @@ class HomeController extends GetxController {
   Rx<bool> get getToggleIsDisLiked => _isDisLiked.toggle();
   String get getImgDownloadUrl => _imgDownloadUrl.value;
   String get getFilePath => _filePath.value;
+  int get getLikedCount => _likeCount.value;
+  int get getDisLikedCount => _disLikeCount.value;
 
   //------------------------------------------
 
@@ -109,6 +117,52 @@ class HomeController extends GetxController {
     }
   }
 
+  void toggleDisLiked(PostModel item) {
+    final String currentUserId = Storages.getUserId;
+    final int interactionIndex =
+        item.intractions!.indexWhere((i) => i.userId == currentUserId);
+    if (interactionIndex != -1) {
+      final IntractionModel intraction = item.intractions![interactionIndex];
+      final int intractId = intraction.id;
+      if (intraction.liked == false) {
+        deleteIntraction(intractId, item.id);
+        setIsDisLiked = false;
+      } else {
+        updateIntraction(intractId, item.id, false);
+        setIsLiked = false;
+        setIsDisLiked = true;
+      }
+    } else {
+      disLiked(item.id);
+      setIsLiked = false;
+      setIsDisLiked = true;
+    }
+    getToggleIsDisLiked;
+  }
+
+  void toggleLiked(PostModel item) {
+    final String currentUserId = Storages.getUserId;
+    final int interactionIndex =
+        item.intractions!.indexWhere((i) => i.userId == currentUserId);
+    if (interactionIndex != -1) {
+      final IntractionModel intraction = item.intractions![interactionIndex];
+      final int intractId = intraction.id;
+      if (intraction.liked == true) {
+        deleteIntraction(intractId, item.id);
+        setIsLiked = false;
+      } else {
+        updateIntraction(intractId, item.id, true);
+        setIsLiked = true;
+      }
+    } else {
+      liked(item.id);
+      setIsDisLiked = false;
+      setIsLiked = true;
+    }
+
+    getToggleIsLiked;
+  }
+
   Future<void> liked(int postId) async {
     try {
       final data = IntractionModel(id: 0, liked: true);
@@ -131,10 +185,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> deleteIntraction(
-    int id,
-    int postId,
-  ) async {
+  Future<void> deleteIntraction(int id, int postId) async {
     try {
       await _http3.deleteInteractionService(id, postId);
       posts.refresh();
@@ -168,6 +219,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> postComment(int postId) async {
+    setIsLoading = true;
     try {
       if (image != null) {
         await uploadImage();
@@ -182,7 +234,7 @@ class HomeController extends GetxController {
         image = null;
         update();
       } else {
-        if (commentC.text.length > 3) {
+        if (commentC.text.length > 1) {
           final data = CommentModel(id: 0, content: commentC.text, image: null);
           final response = await _http2.postCommentService(postId, data);
           final postIndex = posts.indexWhere((post) => post.id == postId);
@@ -191,11 +243,13 @@ class HomeController extends GetxController {
           await getPost();
           commentC.clear();
         } else {
-          Get.snackbar("Notice", "Comment text must more than 3 Characters");
+          Get.snackbar("Notice", "Comment text must more than 1 Characters");
         }
       }
     } catch (e) {
       throw Exception("Error: $e");
+    } finally {
+      setIsLoading = false;
     }
   }
 }

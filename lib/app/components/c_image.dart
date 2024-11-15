@@ -1,9 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:thismed/app/utils/hellper/asset.dart';
-import 'package:thismed/app/utils/hellper/layout.dart';
 
 class CImage extends StatelessWidget {
   const CImage({
@@ -37,14 +33,13 @@ class CImage extends StatelessWidget {
         );
       },
       placeholder: (BuildContext context, String url) {
-        return Shimmer(
-          gradient: LinearGradient(
-              colors: [Colors.grey.shade50, Colors.grey.shade200]),
-          child: Center(
-              child: SizedBox(
-                  height: MediaQuerys.heightMQ / 2,
-                  width: double.infinity,
-                  child: Image.asset(Assets.mainLogo))),
+        return Container(
+          height: hight,
+          width: width,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: Colors.grey.shade100.withAlpha(10),
+          ),
         );
       },
       errorWidget: (context, url, error) => const Icon(Icons.error),
