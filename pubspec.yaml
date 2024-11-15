@@ -25,6 +25,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   image: ^4.3.0
   fluentui_system_icons: ^1.1.264
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_lints: 4.0.0

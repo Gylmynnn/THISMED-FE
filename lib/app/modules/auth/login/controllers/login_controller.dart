@@ -19,6 +19,13 @@ class LoginController extends GetxController {
   }
 
   @override
+  void dispose() {
+    emailC.dispose();
+    passwordC.dispose();
+    super.dispose();
+  }
+
+  @override
   void onClose() {
     emailC.dispose();
     passwordC.dispose();
@@ -34,6 +41,7 @@ class LoginController extends GetxController {
           UserModel(id: '', email: emailC.text, password: passwordC.text);
       final UserModel response = await _http.loginService(data);
       setUserData = response;
+      print(getUserData!.id);
       Get.offNamed(Routes.HOME);
     } catch (e) {
       throw Exception(e);

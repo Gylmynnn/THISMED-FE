@@ -9,6 +9,9 @@ class CsFormField extends StatelessWidget {
     this.obsecureText,
     this.suffixIcon,
     this.textValidator,
+    this.initialValue,
+    this.minLines,
+    this.maxLines,
     this.fullBorder = false,
   });
 
@@ -17,13 +20,19 @@ class CsFormField extends StatelessWidget {
   final bool? obsecureText;
   final bool? fullBorder;
   final String? textValidator;
+  final String? initialValue;
   final Widget? suffixIcon;
+  final int? minLines;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTapOutside: (e) => FocusManager.instance.primaryFocus?.unfocus(),
+      maxLines: maxLines ?? 1,
+      minLines: minLines,
+      initialValue: initialValue,
       obscureText: obsecureText ?? false,
-/*       style: greyTextStyle.copyWith(fontSize: 18, fontWeight: FontWeight.w600), */
       validator: (value) => value == '' ? textValidator! : null,
       controller: controller,
       decoration: InputDecoration(

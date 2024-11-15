@@ -1,6 +1,7 @@
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:thismed/app/modules/chat/views/chat_view.dart';
 import 'package:thismed/app/modules/home/views/home_view.dart';
 import 'package:thismed/app/modules/post/views/post_view.dart';
 import 'package:thismed/app/modules/profile/views/profile_view.dart';
@@ -12,8 +13,9 @@ class BotnavController extends GetxController {
 
   final RxList<Widget> pages = <Widget>[
     const HomeView(),
-    const PostView(),
     const SearchView(),
+    const PostView(),
+    const ChatView(),
     const ProfileView()
   ].obs;
 
@@ -24,14 +26,19 @@ class BotnavController extends GetxController {
       'label': 'Home',
     },
     {
+      'icon_on': FluentIcons.search_24_filled,
+      'icon_off': FluentIcons.search_24_regular,
+      'label': 'Search',
+    },
+    {
       'icon_on': FluentIcons.add_24_filled,
       'icon_off': FluentIcons.add_24_regular,
       'label': 'Add',
     },
     {
-      'icon_on': FluentIcons.search_24_filled,
-      'icon_off': FluentIcons.search_24_regular,
-      'label': 'Search',
+      'icon_on': FluentIcons.chat_24_filled,
+      'icon_off': FluentIcons.chat_24_regular,
+      'label': 'Chat',
     },
     {
       'icon_on': FluentIcons.people_24_filled,

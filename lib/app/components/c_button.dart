@@ -14,6 +14,8 @@ class CsButton extends StatelessWidget {
     this.textOnly = false,
     this.height = 52,
     this.alignment,
+    this.iconAssetPath,
+    this.assetIcon = true,
     this.icon,
   });
 
@@ -23,7 +25,9 @@ class CsButton extends StatelessWidget {
   final Color? borderColor;
   final bool useIcon;
   final bool useBorder;
-  final String? icon;
+  final bool assetIcon;
+  final IconData? icon;
+  final String? iconAssetPath;
   final VoidCallback? onPressed;
   final bool textOnly;
   final TextStyle? textStyle;
@@ -78,14 +82,17 @@ class CsButton extends StatelessWidget {
         ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(icon!), fit: BoxFit.cover),
-                ),
-              ),
+              assetIcon
+                  ? Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(iconAssetPath!),
+                            fit: BoxFit.cover),
+                      ),
+                    )
+                  : Icon(icon),
               const Gap(6),
               Text(title, style: textStyle),
             ],

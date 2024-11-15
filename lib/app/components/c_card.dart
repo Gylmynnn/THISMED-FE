@@ -1,9 +1,10 @@
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:thismed/app/components/c_button.dart';
 import 'package:thismed/app/components/c_form.dart';
+import 'package:thismed/app/components/c_image.dart';
 import 'package:thismed/app/data/models/comment_model.dart';
 import 'package:thismed/app/data/models/post_model.dart';
 import 'package:thismed/app/modules/home/controllers/home_controller.dart';
@@ -68,21 +69,11 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC,
             fontWeight: FontWeight.w600),
       ),
       Gaps.medium,
-      CachedNetworkImage(
-        imageUrl: item.image!,
-        imageBuilder: (context, imageProvider) => Container(
-          height: MediaQuerys.heightMQ / 2.6,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            image: DecorationImage(
-              fit: BoxFit.fill,
-              image: imageProvider,
-            ),
-          ),
-        ),
-        placeholder: (context, url) => const CircularProgressIndicator(),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
+      CImage(
+        imgUrl: item.image!,
+        width: double.infinity,
+        hight: MediaQuerys.heightMQ / 2.6,
+        boxFit: BoxFit.fill,
       ),
       Gaps.small,
       Wrap(
@@ -106,32 +97,10 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC,
             height: 42,
             child: CsButton(
               title:
-                  '👍: ${item.intractions!.where((e) => e.liked == true).length.toString()}',
+                  '👍: ${item.intractions!.where((e) => e.liked == true).length}',
               useBorder: true,
               borderColor: primaryColor,
-              onPressed: () async {
-                homeC.getToggleIsLiked;
-                homeC.setIsDisLiked = false;
-                final int interactionIndex = item.intractions!
-                    .indexWhere((i) => i.liked == true || i.liked == false);
-
-                if (interactionIndex != -1) {
-                  final intractId = item.intractions![interactionIndex].id;
-
-                  if (item.intractions![interactionIndex].liked == true) {
-                    await homeC.deleteIntraction(intractId, item.id);
-                    homeC.setIsLiked = false;
-                  } else {
-                    await homeC.updateIntraction(intractId, item.id, true);
-                    homeC.setIsLiked = true;
-                  }
-                } else {
-                  await homeC.liked(item.id);
-                  homeC.setIsLiked = true;
-                }
-
-                homeC.getToggleIsLiked;
-              },
+              onPressed: () => homeC.toggleLiked(item),
             ),
           ),
           Gaps.small,
@@ -140,32 +109,10 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC,
             height: 42,
             child: CsButton(
               title:
-                  '👎: ${item.intractions!.where((e) => e.liked == false).length.toString()}',
+                  '👎: ${item.intractions!.where((e) => e.liked == false).length}',
               useBorder: true,
               borderColor: primaryColor,
-              onPressed: () async {
-                homeC.getToggleIsDisLiked;
-                homeC.setIsLiked = false;
-                final int interactionIndex = item.intractions!
-                    .indexWhere((i) => i.liked == false || i.liked == true);
-
-                if (interactionIndex != -1) {
-                  final intractId = item.intractions![interactionIndex].id;
-
-                  if (item.intractions![interactionIndex].liked == false) {
-                    await homeC.deleteIntraction(intractId, item.id);
-                    homeC.setIsDisLiked = false;
-                  } else {
-                    await homeC.updateIntraction(intractId, item.id, false);
-                    homeC.setIsDisLiked = true;
-                  }
-                } else {
-                  await homeC.disLiked(item.id);
-                  homeC.setIsDisLiked = true;
-                }
-
-                homeC.getToggleIsDisLiked;
-              },
+              onPressed: () => homeC.toggleDisLiked(item),
             ),
           ),
           Gaps.small,
@@ -173,11 +120,8 @@ Widget _buildBody(BuildContext context, PostModel item, HomeController homeC,
             width: Get.width / 3,
             height: 42,
             child: CsButton(
-              onPressed: () async {
-                // await _buildComment(context);
-                await _buildComment(item, homeC);
-              },
-              title: 'Comments : ${item.comments!.length.toString()}',
+              onPressed: () => _buildComment(item, homeC),
+              title: 'Comments : ${item.comments!.length}',
               useBorder: true,
               borderColor: primaryColor,
             ),
@@ -200,9 +144,10 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
       style: Get.theme.textTheme.bodyMedium!,
       child: Obx(
         () {
-          final findcommentData =
+          final PostModel findcommentData =
               homeC.posts.firstWhere((i) => i.id == item.id);
-          final commentData = findcommentData.comments!.reversed.toList();
+          final List<CommentModel> commentData =
+              findcommentData.comments!.reversed.toList();
           return Stack(
             children: [
               Container(
@@ -212,55 +157,11 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(findcommentData.title),
-                    Text("Comments : ${commentData.length.toString()}"),
+                    Text("Comments : ${commentData.length}"),
                     Gaps.small,
                     Expanded(
-                        child: commentData.isNotEmpty
-                            ? ListView.builder(
-                                itemCount: commentData.length,
-                                itemBuilder: (context, i) {
-                                  final comment = commentData[i];
-                                  return Paddings.mediumSy(Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => Get.toNamed(
-                                            Routes.PROFILE_DETAIL,
-                                            arguments: findcommentData),
-                                        child: CircleAvatar(
-                                          backgroundImage: AssetImage(comment
-                                              .users!.attribute!.avatar!),
-                                        ),
-                                      ),
-                                      Gaps.medium,
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(comment
-                                              .users!.attribute!.username),
-                                          Container(
-                                            constraints: const BoxConstraints(
-                                                maxWidth: 150),
-                                            child: Text(comment.content),
-                                          ),
-                                          Gaps.small,
-                                          _isCommentHasImage(comment)
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        Dates.formated(comment.createdAt!),
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                    ],
-                                  ));
-                                },
-                              )
-                            : const Center(
-                                child: Text("Not Have Comment "),
-                              )),
+                      child: _isHasComment(commentData),
+                    ),
                     SizedBox(
                       height: 50,
                       child: Row(
@@ -270,10 +171,8 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
                               placeholder: 'write a comment',
                               controller: homeC.commentC,
                               suffixIcon: IconButton(
-                                onPressed: () async {
-                                  await homeC.pickImage();
-                                },
-                                icon: const Icon(Icons.image),
+                                onPressed: () => homeC.pickImage(),
+                                icon: const Icon(FluentIcons.image_24_regular),
                               ),
                             ),
                           ),
@@ -283,12 +182,10 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
                             child: CsButton(
                               title: "",
                               useIcon: true,
-                              icon: Assets.sendLogo,
+                              iconAssetPath: Assets.sendLogo,
                               textStyle: const TextStyle(color: Colors.white),
                               bgColor: primaryColor,
-                              onPressed: () async {
-                                await homeC.postComment(item.id);
-                              },
+                              onPressed: () => homeC.postComment(item.id),
                             ),
                           ),
                         ],
@@ -310,6 +207,49 @@ Future<void> _buildComment(PostModel item, HomeController homeC) {
       ),
     ),
   );
+}
+
+Widget _isHasComment(List<CommentModel> commentData) {
+  return commentData.isNotEmpty
+      ? ListView.builder(
+          itemCount: commentData.length,
+          itemBuilder: (context, i) {
+            final comment = commentData[i];
+            return Paddings.mediumSy(Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {},
+                  child: CircleAvatar(
+                    backgroundImage:
+                        AssetImage(comment.users!.attribute!.avatar!),
+                  ),
+                ),
+                Gaps.medium,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(comment.users!.attribute!.username),
+                    Container(
+                      constraints: const BoxConstraints(maxWidth: 150),
+                      child: Text(comment.content),
+                    ),
+                    Gaps.small,
+                    _isCommentHasImage(comment)
+                  ],
+                ),
+                const Spacer(),
+                Text(
+                  Dates.formated(comment.createdAt!),
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ],
+            ));
+          },
+        )
+      : const Center(
+          child: Text("Not Have Comment "),
+        );
 }
 
 Widget _isClickedUserProfile(PostModel item, bool isClickedProfile) {
@@ -361,22 +301,11 @@ Widget _isUserPickImage(HomeController c) {
 
 Widget _isCommentHasImage(CommentModel comment) {
   return comment.image != ""
-      ? CachedNetworkImage(
-          imageUrl: comment.image!,
-          imageBuilder: (context, imageProvider) {
-            return Container(
-              height: 160,
-              width: 160,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: imageProvider,
-                ),
-              ),
-            );
-          },
-          placeholder: (context, url) => const CircularProgressIndicator(),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
+      ? CImage(
+          imgUrl: comment.image!,
+          width: 160,
+          hight: 160,
+          boxFit: BoxFit.fill,
         )
       : const SizedBox();
 }
